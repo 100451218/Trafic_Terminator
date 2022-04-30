@@ -1,5 +1,9 @@
 import csv
-file = open(r'C:\Users\l022c418\Downloads\Data.csv')
+import pathlib
+initial_path = pathlib.Path.home()
+print(initial_path)
+path_to_cls = str(initial_path) + "\PycharmProjects\Trafic_Terminator\data_loader\Data.csv"
+file = open(path_to_cls)
 csvreader = csv.reader(file)
 
 Super={"HHH":{"N":0,"W":0,"E":0},

@@ -76,6 +76,7 @@ while condition_stop==False:
                   'LHH': GetMin('LHH'), 'LLH': GetMin('LLH'), 'LHL': GetMin('LHL'), 'LLL': 0}
 
     count=0
+
     for k in Next_Value:
         if math.isclose(Value[k], Next_Value[k], rel_tol=1e-10):
             count += 1
@@ -85,3 +86,17 @@ while condition_stop==False:
 
 print(Value)
 print(cicles)
+print(Value.keys())
+optimal_policy = {}
+for key in Value.keys():
+    if key != "LLL":
+        N_action = GetAction("N",key)
+        E_action = GetAction("E",key)
+        W_action = GetAction("W",key)
+        if  N_action < E_action and N_action < W_action:
+            optimal_policy[key] = "N"
+        elif E_action < W_action:
+            optimal_policy[key] = "E"
+        else:
+            optimal_policy[key] = "W"
+print(optimal_policy)

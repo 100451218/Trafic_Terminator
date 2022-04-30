@@ -1,19 +1,33 @@
 import csv
 import pathlib
 
+def GetAction(Action, Starting_State):
+    result=20
+    for i in probability_dictionary[Starting_State][Action]:
+        result=result+(probability_dictionary[Starting_State][Action][i]*Value[i])
+
+    return result
+
+def GetMin(Starting_State):
+    Action_N=GetAction('N', Starting_State)
+    Action_W=GetAction("W",Starting_State)
+    Action_E=GetAction("E", Starting_State)
+    return min(Action_E,Action_W,Action_N)
+
+
 initial_path = pathlib.Path.home()
 path_to_cls = str(initial_path) + "\PycharmProjects\Trafic_Terminator\data_loader\Data.csv"
 file = open(path_to_cls)
 csvreader = csv.reader(file)
 
-Super = {"HHH": {"N": {}, "W": {}, "E": {}},
+probability_dictionary = {"HHH": {"N": {}, "W": {}, "E": {}},
          "HHL": {"N": {}, "W": {}, "E": {}},
          "HLH": {"N": {}, "W": {}, "E": {}},
          "HLL": {"N": {}, "W": {}, "E": {}},
          "LHH": {"N": {}, "W": {}, "E": {}},
          "LHL": {"N": {}, "W": {}, "E": {}},
          "LLH": {"N": {}, "W": {}, "E": {}}
-         }
+                          }
 
 for i in csvreader:
     get_elements = i[0].split(";")
@@ -24,18 +38,49 @@ for i in csvreader:
         action = get_elements[3]
         f_state = get_elements[4][0] + get_elements[5][0] + get_elements[6][0]
         try:
-            if type(Super[i_state][action][f_state]) == int:
-                Super[i_state][action][f_state] += 1
+            probability_dictionary[i_state][action][f_state] += 1
         except KeyError:
-            Super[i_state][action][f_state] = 0
+            probability_dictionary[i_state][action][f_state] = 0
 
-print(Super)
-for i_state in Super:
-    for action in Super[i_state]:
+
+for i_state in probability_dictionary:
+    for action in probability_dictionary[i_state]:
         total = 0
-        for f_state_value in Super[i_state][action]:
-            total += Super[i_state][action][f_state_value]
-        for f_state_value in Super[i_state][action]:
-            Super[i_state][action][f_state_value] = Super[i_state][action][f_state_value] / total
+        for f_state_value in probability_dictionary[i_state][action]:
+            total += probability_dictionary[i_state][action][f_state_value]
+        for f_state_value in probability_dictionary[i_state][action]:
+            probability_dictionary[i_state][action][f_state_value] = probability_dictionary[i_state][action][f_state_value] / total
 
-print(Super)
+"""
+In probability dictionary we have the probabilities that can be obtained from the Data.csv file.
+This dictionary is structured following the next structure:
+{'key of starting state':{'Action':{'Resulting state': 'Probability of getting to that state',...},...},...}
+We have not included the Resulting states where the probabilities are 0.
+"""
+
+print(probability_dictionary)
+
+Value={'HHH':0,'HHL':0,'HLH':0,'HLL':0,'LHH':0,'LLH':0,'LHL':0, 'LLL':0}
+#Of corse, there is no value of 'LLL' as it is always 0
+
+Next_Value={'HHH':GetMin('HHH'),'HHL':GetMin('HHL'),'HLH':GetMin('HLH'),'HLL':GetMin('HLL'),'LHH':GetMin('LHH'),'LLH':GetMin('LLH'),'LHL':GetMin('LHL'), 'LLL':0}
+
+condition_stop=False
+cicles=0
+while condition_stop==False:
+    cicles+=1
+    Value = Next_Value
+
+    Next_Value = {'HHH': GetMin('HHH'), 'HHL': GetMin('HHL'), 'HLH': GetMin('HLH'), 'HLL': GetMin('HLL'),
+                  'LHH': GetMin('LHH'), 'LLH': GetMin('LLH'), 'LHL': GetMin('LHL'), 'LLL': 0}
+
+    count=0
+    for k in Next_Value:
+        if ((Value[k]*10**6)//10**6) == ((Next_Value[k]*10**6)//10**6):
+            count+=1
+
+    if count==8:
+        condition_stop=True
+
+print(Value)
+print(cicles)

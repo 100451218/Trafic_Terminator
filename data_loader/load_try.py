@@ -1,18 +1,6 @@
 import csv
 import pathlib
-
-def GetAction(Action, Starting_State):
-    result=20
-    for i in probability_dictionary[Starting_State][Action]:
-        result=result+(probability_dictionary[Starting_State][Action][i]*Value[i])
-
-    return result
-
-def GetMin(Starting_State):
-    Action_N=GetAction('N', Starting_State)
-    Action_W=GetAction("W",Starting_State)
-    Action_E=GetAction("E", Starting_State)
-    return min(Action_E,Action_W,Action_N)
+import math
 
 
 initial_path = pathlib.Path.home()
@@ -27,7 +15,7 @@ probability_dictionary = {"HHH": {"N": {}, "W": {}, "E": {}},
          "LHH": {"N": {}, "W": {}, "E": {}},
          "LHL": {"N": {}, "W": {}, "E": {}},
          "LLH": {"N": {}, "W": {}, "E": {}}
-                          }
+         }
 
 for i in csvreader:
     get_elements = i[0].split(";")
@@ -63,6 +51,19 @@ print(probability_dictionary)
 Value={'HHH':0,'HHL':0,'HLH':0,'HLL':0,'LHH':0,'LLH':0,'LHL':0, 'LLL':0}
 #Of corse, there is no value of 'LLL' as it is always 0
 
+def GetAction(Action, Starting_State):
+    result=20
+    for i in probability_dictionary[Starting_State][Action]:
+        result += (probability_dictionary[Starting_State][Action][i]*Value[i])
+
+    return result
+
+def GetMin(Starting_State):
+    Action_N=GetAction('N', Starting_State)
+    Action_W=GetAction("W",Starting_State)
+    Action_E=GetAction("E", Starting_State)
+    return min(Action_E,Action_W,Action_N)
+
 Next_Value={'HHH':GetMin('HHH'),'HHL':GetMin('HHL'),'HLH':GetMin('HLH'),'HLL':GetMin('HLL'),'LHH':GetMin('LHH'),'LLH':GetMin('LLH'),'LHL':GetMin('LHL'), 'LLL':0}
 
 condition_stop=False
@@ -76,11 +77,11 @@ while condition_stop==False:
 
     count=0
     for k in Next_Value:
-        if ((Value[k]*10**6)//10**6) == ((Next_Value[k]*10**6)//10**6):
-            count+=1
+        if math.isclose(Value[k], Next_Value[k], rel_tol=1e-10):
+            count += 1
+        if count == 8:
+            condition_stop = True
 
-    if count==8:
-        condition_stop=True
 
 print(Value)
 print(cicles)

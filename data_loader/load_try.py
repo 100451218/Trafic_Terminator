@@ -1,7 +1,5 @@
 import csv
 import pathlib
-import math
-
 
 initial_path = pathlib.Path.home()
 path_to_cls = str(initial_path) + "\PycharmProjects\Trafic_Terminator\data_loader\Data.csv"
@@ -75,10 +73,9 @@ while condition_stop==False:
     Next_Value = {'HHH': GetMin('HHH'), 'HHL': GetMin('HHL'), 'HLH': GetMin('HLH'), 'HLL': GetMin('HLL'),
                   'LHH': GetMin('LHH'), 'LLH': GetMin('LLH'), 'LHL': GetMin('LHL'), 'LLL': 0}
 
-    count=0
-
+    count = 0
     for k in Next_Value:
-        if math.isclose(Value[k], Next_Value[k], rel_tol=1e-10):
+        if Next_Value[k] - Value[k] < 0.0001:
             count += 1
         if count == 8:
             condition_stop = True

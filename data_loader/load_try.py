@@ -26,7 +26,7 @@ for i in csvreader:
         try:
             probability_dictionary[i_state][action][f_state] += 1
         except KeyError:
-            probability_dictionary[i_state][action][f_state] = 0
+            probability_dictionary[i_state][action][f_state] = 1
 
 
 for i_state in probability_dictionary:

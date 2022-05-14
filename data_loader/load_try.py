@@ -60,7 +60,7 @@ def GetMin(Starting_State):
     Action_N=GetAction('N', Starting_State)
     Action_W=GetAction("W",Starting_State)
     Action_E=GetAction("E", Starting_State)
-    return min(Action_E,Action_W,Action_N)
+    return round(min(Action_E,Action_W,Action_N),6)
 
 Next_Value={'HHH':GetMin('HHH'),'HHL':GetMin('HHL'),'HLH':GetMin('HLH'),'HLL':GetMin('HLL'),'LHH':GetMin('LHH'),'LLH':GetMin('LLH'),'LHL':GetMin('LHL'), 'LLL':0}
 
@@ -72,7 +72,8 @@ while condition_stop==False:
 
     Next_Value = {'HHH': GetMin('HHH'), 'HHL': GetMin('HHL'), 'HLH': GetMin('HLH'), 'HLL': GetMin('HLL'),
                   'LHH': GetMin('LHH'), 'LLH': GetMin('LLH'), 'LHL': GetMin('LHL'), 'LLL': 0}
-
+    if cicles==2:
+        print(Next_Value["HHH"])
     count = 0
     for k in Next_Value:
         if Next_Value[k] - Value[k] < 0.0001:

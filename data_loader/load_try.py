@@ -14,7 +14,7 @@ states = ["HHH", "HHL", "HLH", "HLL", "LHH", "LHL", "LLH", "LLL"]
 types_of_traffic = ["H","L"]
 number_of_streets = 3
 import itertools
-states_aux = list(itertools.product(types_of_traffic, repeat=3))
+states_aux = list(itertools.product(types_of_traffic, repeat=number_of_streets))
 states = []
 for state in states_aux:
     states.append("".join(state))

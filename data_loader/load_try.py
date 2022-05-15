@@ -9,16 +9,16 @@ csvreader = csv.reader(file)
 
 # Define the variables for the problem
 states = ["HHH", "HHL", "HLH", "HLL", "LHH", "LHL", "LLH", "LLL"]
-print(states)
+"""
+#This is for increasing the adaptability of the MDP, remove the strings if using itertools is allowed.
 types_of_traffic = ["H","L"]
 number_of_streets = 3
-
 import itertools
 states_aux = list(itertools.product(types_of_traffic, repeat=3))
 states = []
 for state in states_aux:
     states.append("".join(state))
-
+"""
 goal_states = ["LLL"]
 actions = ["N", "E", "W"]
 probability_dictionary = {}
